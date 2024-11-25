@@ -5,10 +5,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = str(getenv("DEBUG")).lower() == "true"
 
-PASSWORD = environ["PASSWORD"]
-USERNAME = environ["USERNAME"]
-PORT = int(environ["PORT"])
-HOST = environ["HOST"]
+PASSWORD = environ["AUTH_PASSWORD"]
+USERNAME = environ["AUTH_USERNAME"]
+PORT = int(environ["AUTH_PORT"])
+HOST = environ["AUTH_HOST"]
 
 LOGIN_URL = "/login"
 LOGOUT_URL = "/logout"
