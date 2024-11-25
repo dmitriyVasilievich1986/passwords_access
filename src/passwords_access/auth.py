@@ -101,7 +101,7 @@ class AuthBase(ABC):
             data=data,
             url=url,
         )
-        self.cookies = response.cookies
+        self.cookies = response.cookies or self.cookies
         return response
 
     @abstractmethod
