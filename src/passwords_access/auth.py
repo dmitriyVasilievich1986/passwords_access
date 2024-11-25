@@ -54,13 +54,13 @@ class AuthBase(ABC):
         """
         Logs in the user by sending a POST request to the login URL
         with the provided username, password, and CSRF token.
-        
+
         Raises:
             - SomeException: If there is an error during the login process.
         """
 
         response = self.send_request(url=f"{self.caller_props.url}{config.LOGIN_URL}")
-        self.token = self._parse_csrf_token(response)
+        self.token = self.parse_csrf_token(response)
 
         data: PostData = PostData(
             username=self.caller_props.username,
@@ -104,8 +104,9 @@ class AuthBase(ABC):
         self.cookies = response.cookies or self.cookies
         return response
 
+    @staticmethod
     @abstractmethod
-    def _parse_csrf_token(self, response: Response) -> str:
+    def parse_csrf_token(response: Response) -> str:
         """
         Parses the CSRF token from the given response.
 
@@ -121,11 +122,10 @@ class AuthBase(ABC):
                 and should be overridden in a subclass.
         """
 
-        raise NotImplementedError
-
 
 class AuthText(AuthBase):  # pylint: disable=too-few-public-methods
-    def _parse_csrf_token(self, response: Response) -> str:
+    @staticmethod
+    def parse_csrf_token(response: Response) -> str:
         """
         Parses the CSRF token from the given response.
 
