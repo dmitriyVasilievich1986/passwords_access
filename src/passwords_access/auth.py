@@ -51,6 +51,14 @@ class AuthBase(ABC):
         return r
 
     def _login(self) -> None:
+        """
+        Logs in the user by sending a POST request to the login URL
+        with the provided username, password, and CSRF token.
+        
+        Raises:
+            - SomeException: If there is an error during the login process.
+        """
+
         response = self.send_request(url=f"{self.caller_props.url}{config.LOGIN_URL}")
         self.token = self._parse_csrf_token(response)
 
