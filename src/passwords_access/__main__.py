@@ -7,8 +7,6 @@ from click.core import Context
 from dotenv import load_dotenv
 from requests import Response
 
-from .dataclasses import CallerProps
-
 
 @click.group()
 @click.option("--env-file", type=Path, required=False)
@@ -24,16 +22,11 @@ def main(ctx: Context, env_file: Path | None) -> None:
 
     if env_file:
         load_dotenv(env_file)
-    from . import config  # pylint: disable=import-outside-toplevel
     from .caller import Caller  # pylint: disable=import-outside-toplevel
+    from .dataclasses import CallerProps  # pylint: disable=import-outside-toplevel
 
     ctx.ensure_object(dict)
-    cp = CallerProps(
-        username=config.USERNAME,
-        password=config.PASSWORD,
-        host=config.HOST,
-        port=config.PORT,
-    )
+    cp = CallerProps()
     ctx.obj["caller"] = Caller(caller_props=cp)
     ctx.obj["url"] = cp.url
 

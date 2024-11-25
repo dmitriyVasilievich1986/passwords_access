@@ -1,4 +1,8 @@
+from __future__ import annotations
+
 from dataclasses import asdict, dataclass
+
+from .. import config
 
 
 @dataclass
@@ -7,6 +11,28 @@ class CallerProps:
     password: str
     host: str
     port: int
+
+    def __init__(
+        self,
+        username: str | None = None,
+        password: str | None = None,
+        host: str | None = None,
+        port: int | None = None,
+    ) -> None:
+        """
+        Initialize the CallerProps object.
+
+        Args:
+            username (str, optional): The username. Defaults to None.
+            password (str, optional): The password. Defaults to None.
+            host (str, optional): The host. Defaults to None.
+            port (int, optional): The port. Defaults to None.
+        """
+
+        self.username = username or config.USERNAME
+        self.password = password or config.PASSWORD
+        self.host = host or config.HOST
+        self.port = port or config.PORT
 
     @property
     def url(self) -> str:
