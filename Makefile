@@ -6,4 +6,6 @@ flake:
 	python -m flake8 src
 pylint:
 	python -m pylint src
-format: isort black flake pylint
+mypy:
+	python -m mypy src
+format: isort black flake pylint mypy
