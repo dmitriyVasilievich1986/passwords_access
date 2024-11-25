@@ -1,0 +1,12 @@
+-r base.in
+
+black
+build
+flake8
+isort
+mypy
+pip-compile-multi
+pre-commit
+pylint
+pytest
+pytest-cov
