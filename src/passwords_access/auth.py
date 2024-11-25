@@ -2,13 +2,18 @@ from __future__ import annotations
 
 import re
 from abc import ABC, abstractmethod
+from enum import Enum
 
-import requests
-from requests import Response
+from requests import Response, request
 from requests.cookies import RequestsCookieJar
 
 from . import config
 from .dataclasses import CallerProps, PostData
+
+
+class RequestMethod(Enum):
+    POST = "post"
+    GET = "get"
 
 
 class AuthBase(ABC):
@@ -39,63 +44,58 @@ class AuthBase(ABC):
             Response: The response object from the GET request.
         """
 
-        r = self.get_request(url)
+        r = self.send_request(url)
         if r.status_code != 200:
             self._login()
-            r = self.get_request(url)
+            r = self.send_request(url)
         return r
 
     def _login(self) -> None:
-        """
-        Performs the login process.
-        This method sends a GET request to retrieve the login page,
-        and then sends a POST request with the login credentials.
-        """
-
-        response = self.get_request(url=f"{self.caller_props.url}{config.LOGIN_URL}")
+        response = self.send_request(url=f"{self.caller_props.url}{config.LOGIN_URL}")
         self.token = self._parse_csrf_token(response)
-        self._post_request()
-
-    def get_request(self, url: str) -> Response:
-        """
-        Sends a GET request to the specified URL and stores the response cookies.
-
-        Args:
-            url (str): The URL to send the request to.
-        """
-
-        response: Response = requests.get(
-            headers={"content-type": "application/json"},
-            cookies=self.cookies,
-            timeout=self.timeout,
-            url=url,
-        )
-        self.cookies = response.cookies
-        return response
-
-    def _post_request(self) -> Response:
-        """
-        Sends a POST request to the specified URL with the provided username,
-            password, and CSRF token.
-
-        Returns:
-            Response: The response object containing the server's response
-                to the request.
-        """
 
         data: PostData = PostData(
             username=self.caller_props.username,
             password=self.caller_props.password,
             csrf_token=self.token,
         )
-        r = requests.post(
+        self.send_request(
             url=f"{self.caller_props.url}{config.LOGIN_URL}",
-            cookies=self.cookies,
-            timeout=self.timeout,
+            method=RequestMethod.POST,
             data=data.json(),
         )
-        self.cookies = r.cookies
-        return r
+
+    def send_request(
+        self,
+        url: str,
+        method: RequestMethod = RequestMethod.GET,
+        data: dict | None = None,
+    ) -> Response:
+        """
+        Sends a request to the specified URL using the specified method and data.
+
+        Args:
+            url (str): The URL to send the request to.
+            method (RequestMethod, optional): The HTTP method to use for the request.
+                Defaults to RequestMethod.GET.
+            data (dict | None, optional): The data to send with the request.
+                Defaults to None.
+
+        Returns:
+            Response: The response object containing the server's response
+                to the request.
+        """
+
+        response: Response = request(
+            headers={"content-type": "application/json"},
+            cookies=self.cookies,
+            timeout=self.timeout,
+            method=method.value,
+            data=data,
+            url=url,
+        )
+        self.cookies = response.cookies
+        return response
 
     @abstractmethod
     def _parse_csrf_token(self, response: Response) -> str:
