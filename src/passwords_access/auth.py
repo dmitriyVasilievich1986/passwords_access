@@ -95,7 +95,6 @@ class AuthBase(ABC):
         """
 
         response: Response = request(
-            headers={"content-type": "application/json"},
             cookies=self.cookies,
             timeout=self.timeout,
             method=method.value,
