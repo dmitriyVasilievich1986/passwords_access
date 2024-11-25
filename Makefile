@@ -9,3 +9,6 @@ pylint:
 mypy:
 	python -m mypy src
 format: isort black flake pylint mypy
+
+pytest:
+	python -m pytest --cov-report term-missing --cov=passwords_access -vvv tests
