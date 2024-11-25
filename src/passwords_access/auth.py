@@ -1,15 +1,18 @@
+from __future__ import annotations
+
 import re
 from abc import ABC, abstractmethod
 
 import requests
 from requests import Response
+from requests.cookies import RequestsCookieJar
 
 from . import config
 from .dataclasses import CallerProps, PostData
 
 
 class AuthBase(ABC):
-    cookies: dict = None
+    cookies: RequestsCookieJar | None = None
     timeout: int = 30
 
     def __init__(self, caller_props: CallerProps) -> None:
@@ -92,6 +95,7 @@ class AuthBase(ABC):
             data=data.json(),
         )
         self.cookies = r.cookies
+        return r
 
     @abstractmethod
     def _parse_csrf_token(self, response: Response) -> str:
@@ -131,5 +135,7 @@ class AuthText(AuthBase):  # pylint: disable=too-few-public-methods
             'reasonable_token'
         """  # noqa: E501, pylint: disable=line-too-long
 
-        input_value = re.search(r'<input id="csrf_token".+?>', response.text).group(0)
-        return re.sub(r'^<.+?value="|">$', "", input_value)
+        input_value_reg = re.search(r'<input id="csrf_token".+?>', response.text)
+        if input_value_reg is None:
+            raise ValueError("CSRF token not found in response.")
+        return re.sub(r'^<.+?value="|">$', "", input_value_reg.group(0))

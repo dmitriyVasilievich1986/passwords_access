@@ -1,14 +1,14 @@
-from os import getenv
+from os import environ, getenv
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = str(getenv("DEBUG")).lower() == "true"
 
-PASSWORD = getenv("PASSWORD")
-USERNAME = getenv("USERNAME")
-HOST = getenv("HOST")
-PORT = getenv("PORT")
+PASSWORD = environ["PASSWORD"]
+USERNAME = environ["USERNAME"]
+PORT = int(environ["PORT"])
+HOST = environ["HOST"]
 
 LOGIN_URL = "/login"
 LOGOUT_URL = "/logout"

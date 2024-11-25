@@ -8,9 +8,12 @@ from .dataclasses import CallerProps
 
 
 class Caller:
-    auth: AuthBase = AuthText
+    auth_cls: type[AuthBase] = AuthText
+    auth: AuthBase
 
-    def __init__(self, caller_props: CallerProps, auth: AuthBase | None = None) -> None:
+    def __init__(
+        self, caller_props: CallerProps, auth_cls: type[AuthBase] | None = None
+    ) -> None:
         """
         Initialize the Caller object.
 
@@ -21,7 +24,7 @@ class Caller:
         """
 
         self.caller_props = caller_props
-        self.auth = (auth or self.auth)(caller_props)
+        self.auth = (auth_cls or self.auth_cls)(caller_props)
 
     def __call__(self, url: str) -> Response:
         """
