@@ -29,4 +29,5 @@ jobs:
       
       - name: Run mypy
         run: |
+          python -m mypy --install-types
           python -m mypy src
