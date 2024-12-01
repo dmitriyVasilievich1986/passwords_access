@@ -5,7 +5,7 @@
 #
 #    pip-compile-multi
 #
--e file:///Users/dshcherbachenia/development/pet/passwords_access
+-e file:.
     # via -r requirements/base.in
 certifi==2024.8.30
     # via requests
