@@ -1,7 +1,6 @@
 import pytest
-from requests import Response
-
 from passwords_access.auth import AuthText
+from requests import Response
 
 
 def test_parse_csrf_token():

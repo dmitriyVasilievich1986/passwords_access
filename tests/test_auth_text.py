@@ -1,9 +1,8 @@
 import pytest
-from requests import Response
-
 from passwords_access import config
 from passwords_access.auth import AuthBase, AuthText
 from passwords_access.dataclasses import CallerProps
+from requests import Response
 
 
 def test_not_implemented_error():

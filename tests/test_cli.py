@@ -1,5 +1,4 @@
 from click.testing import CliRunner
-
 from passwords_access import config
 from passwords_access.__main__ import main
 from passwords_access.caller import Caller

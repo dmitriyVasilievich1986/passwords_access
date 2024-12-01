@@ -10,6 +10,9 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
 
@@ -20,7 +23,7 @@ description = "Simple library to retrieve secrets from server"
 readme = "Readme.md"
 license = { file = "LICENSE" }
 
-requires-python = ">=3.12"
+requires-python = ">=3.9,<3.13"
 dependencies = ["click>=8.0.3", "python-dotenv", "requests>=2.0"]
 
 [tool.hatch.version]
@@ -34,3 +37,13 @@ passwords = "passwords_access.__main__:main"
 
 [project.urls]
 Homepage = "https://github.com/dmitriyVasilievich1986/passwords_access"
+
+[tool.isort]
+profile = "black"
+known_third_party = [
+    "click",
+    "dotenv",
+    "passwords_access",
+    "pytest",
+    "requests",
+]
