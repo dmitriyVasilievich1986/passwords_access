@@ -37,3 +37,12 @@ passwords = "passwords_access.__main__:main"
 
 [project.urls]
 Homepage = "https://github.com/dmitriyVasilievich1986/passwords_access"
+
+[tool.isort]
+known_third_party = [
+    "click",
+    "dotenv",
+    "passwords_access",
+    "pytest",
+    "requests",
+]
