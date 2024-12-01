@@ -39,6 +39,7 @@ passwords = "passwords_access.__main__:main"
 Homepage = "https://github.com/dmitriyVasilievich1986/passwords_access"
 
 [tool.isort]
+profile = "black"
 known_third_party = [
     "click",
     "dotenv",
